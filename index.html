@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>XPath tool</title>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <script src="jquery.js"></script>
+    <script>
+
+      $(document).ready(function() {
+	  initialize();
+      });
+
+String.prototype.trim = function () {
+    return this.replace(/^\s*/, "").replace(/\s*$/, "");
+}
+
+function initialize() {
+    $("#xpath").keypress(function() {
+	$("#info").html('--- waiting ---');
+	window.setTimeout(resolver,2000);
+    });
+};
+
+function resolver(){
+    var parser = new DOMParser()
+    var s= $("#xml").val()
+    var xp=$("#xpath").val()
+    $("#xp").text(xp)
+    doc = parser.parseFromString(s,"text/xml")
+    var pc = doc.evaluate(xp, doc, null, XPathResult.ANY_TYPE, null );
+    $("#info").html('Listing XPath Query results');
+    var r="";
+    var res=pc.iterateNext();
+    while(res){
+	r = r+res.nodeName+":" + res.textContent.trim() + '\n';
+	res=pc.iterateNext();
+    }
+    $("#result").html(r);
+    $("#info").html('XPath Results:');
+};
+
+    </script>
+    <div id="header"> <h3> Simple XPath query tool</h3>
+    <p> Client side javascript only. Probably not namespace-friendly</p>
+    <strong>Usage:</strong> Drop XML file in Source text area, type a XPath expression in the textbox. Enjoy
+</div>
+<div id="content">
+<form>
+      <label>XPath
+      <input id="xpath" size="100" type="text"><br/>
+      </label>
+      <pre><div id="xp">XPath:</div></pre>
+      <div id="info">Info</div>
+	  <pre id="filtered">
+	<div id="result">
+	  </div>
+	    </pre>
+      
+      <label> Source<br/>
+      <textarea cols="100" rows="50" id="xml" type="text">
+      </textarea></label></div>
+<br class="clearfix"/>
+
+      <div id="footer">
+     <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
+</br>
+<a href="www.nystedt.no">Copyright (c) 2012 Jari Nystedt.</a>
+</div>
+</body>
+</html>
