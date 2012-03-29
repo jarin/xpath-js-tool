@@ -16,10 +16,6 @@
 	  initialize();
       });
 
-String.prototype.trim = function () {
-    return this.replace(/^\s*/, "").replace(/\s*$/, "");
-}
-
 function initialize() {
     $("#xpath").keypress(function() {
 	$("#info").html('--- waiting ---');
@@ -38,7 +34,7 @@ function resolver(){
     var r="";
     var res=pc.iterateNext();
     while(res){
-	r = r+res.nodeName+":" + res.textContent.trim() + '\n';
+	r = r+res.nodeName+":" + $.trim(res.textContent) + '\n';
 	res=pc.iterateNext();
     }
     $("#result").html(r);
@@ -47,9 +43,13 @@ function resolver(){
 
     </script>
     <div id="header"> <h3> Simple XPath query tool</h3>
-    <p> Client side javascript only. Probably not namespace-friendly</p>
+    <p> Client side javascript only. Use expressions like 
+    <pre>//*[local-name()='Foo']</pre> to search for <code>Foo</code> regardless of namespaces. </p>
     <strong>Usage:</strong> Drop XML file in Source text area, type a XPath expression in the textbox. Enjoy
 </div>
+
+<br class="clear"/>
+<p/>
 <div id="content">
 <form>
       <label>XPath
@@ -65,8 +65,8 @@ function resolver(){
       <label> Source<br/>
       <textarea cols="100" rows="50" id="xml" type="text">
       </textarea></label></div>
-<br class="clearfix"/>
 
+<br class="clear"/>
       <div id="footer">
 Get it from:git://github.com/jarin/xpath-js-tool.git<br/>
     <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
